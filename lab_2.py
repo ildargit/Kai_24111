@@ -52,15 +52,25 @@ def generate_password(length, chosen_sets):
 
 def get_rate_password(password, chosen_sets):
     password_len = len(password)
-    rate = 0
+    score = 0
 
-    if password_len < 8:
-        return "Плохой пароль"
-    else:
-        if all(any(c in password for c in myset) for myset in chosen_sets):
-            return "Сложный пароль"
+    if password_len >= 8:
+        if password_len <= 11:
+            score += 1
+        elif password_len <= 15:
+            score += 2
         else:
-            return "Средний пароль"
+            score += 3
+
+        score += sum(any(c in password for c in rule) for rule in chosen_sets)
+
+    if score <= 1:
+        return "Слабый пароль"
+    elif score <= 4:
+        return "Средний пароль"
+    else:
+        return "Сложный пароль"
+
 
 
 def main():
